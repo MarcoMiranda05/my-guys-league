@@ -287,7 +287,7 @@ function App() {
             }}
             value={stagePlayers}
             multiple
-            options={adpData}
+            options={adpData.filter((o) => o.Team != "DST")}
             getOptionLabel={(option) =>
               `${option.Rank} - ${option.Player} (${option.POS}) - ${option.Team}`
             }
