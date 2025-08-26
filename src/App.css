@@ -54,6 +54,7 @@
 
 .MyGuys-show-players {
   gap: 30px;
-  align-items: flex-start
+  align-items: flex-start;
+    justify-content: center; 
 
 }

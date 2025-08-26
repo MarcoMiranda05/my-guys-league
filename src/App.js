@@ -151,7 +151,7 @@ function App() {
 
     return (
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 500 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
@@ -257,9 +257,15 @@ function App() {
             <div className="counter-box-value">{usedPoints}</div>
           </div>
           <div className="counter-box vLayout">
-            <div className="counter-box-label">Minimun Points</div>
+            <div className="counter-box-label">Minimum Points</div>
             <div className="counter-box-value">
               {ADP_SUM_VALUES[`block_${stage}`]}
+            </div>
+          </div>
+          <div className="counter-box vLayout">
+            <div className="counter-box-label">Points needed</div>
+            <div className="counter-box-value">
+              {ADP_SUM_VALUES[`block_${stage}`] - usedPoints}
             </div>
           </div>
         </div>
@@ -289,7 +295,7 @@ function App() {
             multiple
             options={adpData.filter((o) => o.Team != "DST")}
             getOptionLabel={(option) =>
-              `${option.Rank} - ${option.Player} (${option.POS}) - ${option.Team}`
+              `${option.Rank} - ${option.Player} (${option.POS}) - ${option.Team} - bye ${option.Bye}`
             }
             renderInput={(params) => <TextField {...params} label={label} />}
           />
@@ -321,14 +327,19 @@ function App() {
         <div className="MyGuys-show-players hLayout">
           <div className="MyGuys-selected-team vLayout">
             <div className="MyGuys-selected-team-lable">My Guys</div>
-            <TableContainer id="my-guys" component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableContainer
+              sx={{ minWidth: 500 }}
+              id="my-guys"
+              component={Paper}
+            >
+              <Table aria-label="simple table">
                 <TableHead>
                   <TableRow>
                     <TableCell>ADP</TableCell>
                     <TableCell>Player</TableCell>
                     <TableCell>Position</TableCell>
                     <TableCell>Team</TableCell>
+                    <TableCell>Bye</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -341,6 +352,7 @@ function App() {
                       <TableCell>{row.Player}</TableCell>
                       <TableCell>{row.POS}</TableCell>
                       <TableCell>{row.Team}</TableCell>
+                      <TableCell>{row.Bye}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
