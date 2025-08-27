@@ -21,6 +21,8 @@ import {
 } from "./data/adpValues";
 
 function App() {
+  const IS_MOBILE = window.innerWidth < 820;
+
   const [loading, setLoading] = useState(false);
   const [adpData, setAdpData] = useState(ADP);
   const [stage, setStage] = useState(1);
@@ -234,6 +236,41 @@ function App() {
     }
   }
 
+  function renderByPosition() {
+    let QB = 0;
+    let WR = 0;
+    let RB = 0;
+    let TE = 0;
+
+    selectedTeam.map((player) => {
+      if (player.POS.includes("QB")) QB++;
+      else if (player.POS.includes("WR")) WR++;
+      else if (player.POS.includes("RB")) RB++;
+      else if (player.POS.includes("TE")) TE++;
+    });
+
+    return (
+      <>
+        <div className="counter-box vLayout">
+          <div className="counter-box-label">QB</div>
+          <div className="counter-box-value">{QB}</div>
+        </div>
+        <div className="counter-box vLayout">
+          <div className="counter-box-label">WR</div>
+          <div className="counter-box-value">{WR}</div>
+        </div>
+        <div className="counter-box vLayout">
+          <div className="counter-box-label">RB</div>
+          <div className="counter-box-value">{RB}</div>
+        </div>
+        <div className="counter-box vLayout">
+          <div className="counter-box-label">TE</div>
+          <div className="counter-box-value">{TE}</div>
+        </div>
+      </>
+    );
+  }
+
   let label = "";
 
   if (stage === 1) {
@@ -324,59 +361,68 @@ function App() {
         )}
       </div>
       {selectedTeam.length ? (
-        <div className="MyGuys-show-players hLayout">
-          <div className="MyGuys-selected-team vLayout">
-            <div className="MyGuys-selected-team-lable">My Guys</div>
-            <TableContainer
-              sx={{ minWidth: 500 }}
-              id="my-guys"
-              component={Paper}
-            >
-              <Table aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>ADP</TableCell>
-                    <TableCell>Player</TableCell>
-                    <TableCell>Position</TableCell>
-                    <TableCell>Team</TableCell>
-                    <TableCell>Bye</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {selectedTeam.map((row) => (
-                    <TableRow
-                      key={row.name}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell>{row.Rank}</TableCell>
-                      <TableCell>{row.Player}</TableCell>
-                      <TableCell>{row.POS}</TableCell>
-                      <TableCell>{row.Team}</TableCell>
-                      <TableCell>{row.Bye}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <div className="hLayout">
-              <Button variant="contained" onClick={handleResetTeam}>
-                Reset team
-              </Button>
-              <Button
-                variant="outlined"
-                disabled={stage == 1}
-                onClick={handlePreviousRound}
+        <>
+          <div className="MyGuys-by-position hLayout">{renderByPosition()}</div>
+          <div
+            className={`MyGuys-show-players ${
+              IS_MOBILE ? "vLayout" : "hLayout"
+            }`}
+          >
+            <div className="MyGuys-selected-team vLayout">
+              <div className="MyGuys-selected-team-lable">My Guys</div>
+              <TableContainer
+                sx={{ minWidth: 500 }}
+                id="my-guys"
+                component={Paper}
               >
-                Previous round
-              </Button>
+                <Table aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>ADP</TableCell>
+                      <TableCell>Player</TableCell>
+                      <TableCell>Position</TableCell>
+                      <TableCell>Team</TableCell>
+                      <TableCell>Bye</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {selectedTeam.map((row) => (
+                      <TableRow
+                        key={row.name}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell>{row.Rank}</TableCell>
+                        <TableCell>{row.Player}</TableCell>
+                        <TableCell>{row.POS}</TableCell>
+                        <TableCell>{row.Team}</TableCell>
+                        <TableCell>{row.Bye}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <div className="hLayout">
+                <Button variant="contained" onClick={handleResetTeam}>
+                  Reset team
+                </Button>
+                <Button
+                  variant="outlined"
+                  disabled={stage == 1}
+                  onClick={handlePreviousRound}
+                >
+                  Previous round
+                </Button>
+              </div>
+            </div>
+            <div className="MyGuys-lineup vLayout">
+              <div className="MyGuys-selected-team-lable">Lineup</div>
+
+              {renderLineup()}
             </div>
           </div>
-          <div className="MyGuys-lineup vLayout">
-            <div className="MyGuys-selected-team-lable">Lineup</div>
-
-            {renderLineup()}
-          </div>
-        </div>
+        </>
       ) : null}
     </div>
   );
