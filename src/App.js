@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { useEffect, useState } from "react";
 import { ADP } from "./data/adp";
@@ -23,7 +22,7 @@ import {
 function App() {
   const IS_MOBILE = window.innerWidth < 820;
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [adpData, setAdpData] = useState(ADP);
   const [stage, setStage] = useState(1);
 
@@ -35,8 +34,8 @@ function App() {
     if (stage > 1) {
       setAdpData(
         ADP.filter(
-          (player) => player.Rank > MAX_VALUE_PER_ROUND[`block_${stage - 1}`]
-        )
+          (player) => player.Rank > MAX_VALUE_PER_ROUND[`block_${stage - 1}`],
+        ),
       );
     } else {
       setAdpData(ADP);
@@ -89,12 +88,12 @@ function App() {
   }
 
   function handlePreviousRound() {
-    if (stage == 2) {
+    if (stage === 2) {
       handleResetTeam();
     } else {
       let newSelectedTeam = selectedTeam.slice(
         0,
-        -MAX_PLAYERS_PER_ROUND[`block_${stage - 1}`]
+        -MAX_PLAYERS_PER_ROUND[`block_${stage - 1}`],
       );
 
       let previousPlayersSumRank = 0;
@@ -195,7 +194,7 @@ function App() {
       case "TE":
         validPlayer = selectedTeam.find(
           (player) =>
-            player.POS.includes(position) && !assignedPlayers.includes(player)
+            player.POS.includes(position) && !assignedPlayers.includes(player),
         );
 
         break;
@@ -203,13 +202,13 @@ function App() {
       case "FLEX":
         validPlayer = selectedTeam.find(
           (player) =>
-            !player.POS.includes("QB") && !assignedPlayers.includes(player)
+            !player.POS.includes("QB") && !assignedPlayers.includes(player),
         );
         break;
 
       case "BENCH":
         validPlayer = selectedTeam.find(
-          (player) => !assignedPlayers.includes(player)
+          (player) => !assignedPlayers.includes(player),
         );
         break;
 
@@ -242,7 +241,7 @@ function App() {
     let RB = 0;
     let TE = 0;
 
-    selectedTeam.map((player) => {
+    selectedTeam.forEach((player) => {
       if (player.POS.includes("QB")) QB++;
       else if (player.POS.includes("WR")) WR++;
       else if (player.POS.includes("RB")) RB++;
@@ -330,7 +329,7 @@ function App() {
             }}
             value={stagePlayers}
             multiple
-            options={adpData.filter((o) => o.Team != "DST")}
+            options={adpData.filter((o) => o.Team !== "DST")}
             getOptionLabel={(option) =>
               `${option.Rank} - ${option.Player} (${option.POS}) - ${option.Team} - bye ${option.Bye}`
             }
@@ -345,7 +344,7 @@ function App() {
             variant="contained"
             disabled={
               usedPoints < ADP_SUM_VALUES[`block_${stage}`] ||
-              stagePlayers.length != MAX_PLAYERS_PER_ROUND[`block_${stage}`]
+              stagePlayers.length !== MAX_PLAYERS_PER_ROUND[`block_${stage}`]
             }
           >
             Confirm
@@ -409,7 +408,7 @@ function App() {
                 </Button>
                 <Button
                   variant="outlined"
-                  disabled={stage == 1}
+                  disabled={stage === 1}
                   onClick={handlePreviousRound}
                 >
                   Previous round
